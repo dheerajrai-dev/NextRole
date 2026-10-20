@@ -1,13 +1,16 @@
 # NextRole 🚀
-### AI-Powered Unified Job & Internship Finder (MVP)
+### Unified Job & Internship Finder Powered by TinyFish Web API
 
-**NextRole** is a simple, functional, student-friendly job and internship finder powered by the **TinyFish Web API**. It lets students and job seekers search across multiple career platforms (LinkedIn, Internshala, Indeed, Wellfound, direct company career pages) from a single interface, eliminates duplicate listings, and provides direct links to the original application portals.
+**One search. Multiple sources. Better opportunity discovery.**
+
+**NextRole** is a simple, functional, student-friendly job and internship finder powered by the **TinyFish Web API**. It lets students and job seekers discover opportunities across multiple career platforms (LinkedIn, Internshala, Indeed, Wellfound, direct company career pages) from a single interface, eliminates duplicate listings, and provides direct links to original application portals.
 
 ---
 
 ## 📌 Table of Contents
 
-- [Core Workflow](#-core-workflow)
+- [Core Principles](#-core-principles)
+- [How NextRole Works](#-how-nextrole-works)
 - [Key Features](#-key-features)
 - [Architecture & Data Flow](#-architecture--data-flow)
 - [Reference Repositories & Learnings](#-reference-repositories--learnings)
@@ -19,11 +22,20 @@
 - [Running NextRole Locally](#-running-nextrole-locally)
 - [API Endpoints](#-api-endpoints)
 - [Testing](#-testing)
+- [Responsible Data Access](#-responsible-data-access)
 - [Troubleshooting & Known Limitations](#-troubleshooting--known-limitations)
 
 ---
 
-## 🔄 Core Workflow
+## 💡 Core Principles
+
+- **Discover more efficiently:** Search across multiple supported sources from one interface.
+- **Improve result quality:** Normalize listings, identify duplicates, and evaluate freshness.
+- **Find relevant opportunities:** Apply user-defined filters without heavy infrastructure or complex databases.
+
+---
+
+## 🔄 How NextRole Works
 
 ```text
 Enter Job Query & Filters 
@@ -231,62 +243,9 @@ Open `http://127.0.0.1:8000` in your browser.
 | `GET` | `/api/health` | Checks backend status, API version, and whether TinyFish is configured. |
 | `POST` | `/api/search` | Performs a live TinyFish search, parses results, deduplicates, and returns listings. |
 
-### Example Search Request (`POST /api/search`):
-```json
-{
-  "query": "Python Developer Intern",
-  "location": "Delhi NCR",
-  "work_mode": "Remote",
-  "employment_type": "Internship",
-  "experience_level": "Fresher",
-  "limit": 20
-}
-```
-
-### Example Search Response:
-```json
-{
-  "query": "Python Developer Intern",
-  "total_found": 15,
-  "deduplicated_count": 3,
-  "results": [
-    {
-      "id": "a1b2c3d4e5f67890",
-      "title": "Python Developer Intern",
-      "company": "TechSolutions",
-      "location": "Delhi NCR",
-      "description": "Looking for a Python Developer Intern with basic knowledge of FastAPI or Django.",
-      "skills": ["Python", "FastAPI", "Git"],
-      "employment_type": "Internship",
-      "experience_level": "Fresher / Entry level",
-      "work_mode": "Remote",
-      "salary": "₹20,000/month",
-      "source": "Internshala",
-      "url": "https://internshala.com/internship/detail/python-intern",
-      "posting_date": "2026-10-18",
-      "extracted_at": "2026-10-20T12:30:00Z",
-      "status": "Needs verification"
-    }
-  ],
-  "applied_filters": {
-    "location": "Delhi NCR",
-    "work_mode": "Remote",
-    "employment_type": "Internship",
-    "experience_level": "Fresher"
-  },
-  "search_metadata": {
-    "source": "TinyFish Web API",
-    "provider_total": 15,
-    "retrieved_at": "2026-10-20T12:30:00Z"
-  }
-}
-```
-
 ---
 
 ## 🧪 Testing
-
-The test suite covers request validation, parsing, error handling, duplicate detection, and health checks.
 
 Run tests using pytest inside `.venv`:
 
@@ -295,17 +254,15 @@ $env:PYTHONPATH = "backend"
 .\.venv\Scripts\python.exe -m pytest backend/tests/ -v
 ```
 
-### Test Coverage Highlights:
-- `test_health_check_endpoint`: Verifies backend health and status reporting.
-- `test_search_request_validation`: Ensures empty/invalid requests are rejected (422).
-- `test_clean_text_and_url_canonicalization`: Tests tracking parameter removal and URL normalization.
-- `test_job_parser_fields`: Validates extraction of title, company, skills, work mode, and salary.
-- `test_job_parser_malformed_and_missing_fields`: Ensures unknown fields remain empty and are never hallucinated.
-- `test_deduplication_exact_url_and_company_title`: Verifies that duplicate URLs and identical company+title listings are removed while preserving distinct companies.
-- `test_api_auth_failure_handling`: Verifies 401 propagation when TinyFish credentials are invalid.
-- `test_api_timeout_handling`: Verifies 504 gateway timeout handling.
-- `test_empty_search_results`: Confirms clean response structure when zero results are found.
-- `test_api_missing_key_handling`: Tests behavior when `TINYFISH_API_KEY` is not configured.
+---
+
+## 🛡️ Responsible Data Access
+
+NextRole relies on access to external job sources via TinyFish Web API:
+- Respects platform terms, rate limits, and robots specifications.
+- Avoids bypassing authentication or access controls.
+- Stores only necessary transient listing data in memory during discovery sessions.
+- Preserves accurate source attribution and original application URLs.
 
 ---
 
