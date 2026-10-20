@@ -5,13 +5,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.search import router as search_router
 
-# Load environment variables from project root .env or backend/.env
+# Load environment variables from project root .env regardless of working directory
 root_dir = Path(__file__).resolve().parent.parent.parent
 env_path = root_dir / ".env"
 if env_path.exists():
-    load_dotenv(dotenv_path=env_path)
+    load_dotenv(dotenv_path=env_path, override=True)
 else:
-    load_dotenv()
+    load_dotenv(override=True)
 
 app = FastAPI(
     title="NextRole API",
@@ -19,18 +19,19 @@ app = FastAPI(
     version="0.1.0",
 )
 
-# CORS configuration for local frontend development
+# CORS configuration
+frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173").rstrip("/")
+allowed_origins = list({
+    frontend_url,
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+})
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:8080",
-        "http://127.0.0.1:8080",
-        "*",
-    ],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
