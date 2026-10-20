@@ -1,0 +1,35 @@
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment configurations & secrets
+.env
+.env.local
+*.local
+
+# Node & Frontend build outputs
+node_modules/
+dist/
+build/
+.cache/
+
+# IDE & Editor folders
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
