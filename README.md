@@ -1,404 +1,323 @@
 # NextRole 🚀
-### AI-Powered Unified Job & Internship Finder
+### AI-Powered Unified Job & Internship Finder (MVP)
 
-NextRole is an AI-powered unified job discovery platform that brings job and internship listings from multiple supported sources into a single dashboard. Using the **TinyFish Web API** for web data extraction, NextRole aims to simplify job hunting through unified search, smart filters, duplicate detection, freshness verification, and personalized job matching.
-
-Instead of searching multiple platforms individually, users can discover relevant opportunities in one place and navigate directly to the original application page.
-
-> **Our goal:** Search once, discover opportunities across multiple platforms, and spend less time hunting for jobs.
+**NextRole** is a simple, functional, student-friendly job and internship finder powered by the **TinyFish Web API**. It lets students and job seekers search across multiple career platforms (LinkedIn, Internshala, Indeed, Wellfound, direct company career pages) from a single interface, eliminates duplicate listings, and provides direct links to the original application portals.
 
 ---
 
 ## 📌 Table of Contents
 
-- [The Problem](#-the-problem)
-- [Our Solution](#-our-solution)
+- [Core Workflow](#-core-workflow)
 - [Key Features](#-key-features)
-- [How It Works](#-how-it-works)
-- [Example Use Case](#-example-use-case)
-- [Technology Stack](#-technology-stack)
-- [System Architecture](#-system-architecture)
-- [Project Scope](#-project-scope)
-- [Team Responsibilities](#-team-responsibilities)
-- [Getting Started](#-getting-started)
-- [Project Structure](#-project-structure)
-- [Responsible Data Collection](#-responsible-data-collection)
-- [Future Enhancements](#-future-enhancements)
-- [Contributing](#-contributing)
-- [License](#-license)
-
-## 🎯 The Problem
-
-Finding a suitable job or internship often requires searching across multiple platforms, repeatedly applying the same filters, comparing similar listings, and checking whether opportunities are still active.
-
-This creates several problems:
-
-- **Fragmented discovery:** Opportunities are distributed across job boards and company career pages.
-- **Repeated searches:** Users must enter similar queries and filters on different platforms.
-- **Duplicate listings:** The same job may appear on multiple websites.
-- **Uncertain freshness:** Some listings may be expired, closed, or no longer available.
-- **Poor personalization:** Traditional search results may not adequately reflect a user's skills, experience, and preferences.
-
-These challenges can make job hunting especially time-consuming for students, freshers, and early-career professionals.
-
-## 💡 Our Solution
-
-NextRole provides a unified interface for discovering jobs and internships from multiple supported sources.
-
-Users enter a job title, select their preferences, and receive consolidated results in one dashboard. The platform standardizes listing information, identifies potential duplicates, evaluates listing freshness where possible, and helps users discover opportunities relevant to their goals.
-
-The initial version focuses on building a reliable job discovery pipeline before introducing advanced AI capabilities.
-
-## ✨ Key Features
-
-### Core Features — MVP
-
-- **Unified Job Search:** Search for jobs and internships using a single interface.
-- **Multi-Source Discovery:** Retrieve listings from supported job platforms and company career pages using TinyFish and other permitted integrations.
-- **Smart Filters:** Filter opportunities by job title, location, experience level, work mode, and employment type.
-- **Centralized Dashboard:** View listings from different sources in a consistent format.
-- **Duplicate Detection:** Identify and consolidate listings that appear to represent the same opportunity.
-- **Freshness Verification:** Record when a listing was checked and distinguish verified, potentially expired, and unverified opportunities.
-- **Direct Application Links:** Open the original listing to review details and apply.
-- **Standardized Job Data:** Normalize company names, job titles, locations, requirements, and other available fields.
-
-### Advanced Features — Planned
-
-- **AI-Powered Job Matching:** Compare user skills and experience with job requirements.
-- **Resume-Based Recommendations:** Suggest relevant opportunities based on an uploaded resume.
-- **Skill-Gap Analysis:** Identify missing or underdeveloped skills for a target role.
-- **Personalized Ranking:** Prioritize opportunities according to user preferences and compatibility.
-- **Job Alerts:** Notify users when new matching opportunities are discovered.
-- **Saved Jobs:** Bookmark opportunities and track application progress.
-
-*Planned features are not necessarily implemented in the current version.*
-
-## ⚙️ How It Works
-
-1. **Search:** The user enters a target role, such as `Python Developer Intern`.
-2. **Configure Preferences:** The user selects location, experience level, work mode, and employment type.
-3. **Discover Opportunities:** The backend initiates searches across configured sources using TinyFish and other authorized integrations.
-4. **Extract Listing Data:** Available job details are retrieved from supported sources.
-5. **Normalize Results:** The processing pipeline converts source-specific records into a common data format.
-6. **Detect Duplicates:** The system compares listing identifiers, application URLs, company names, job titles, and other available attributes.
-7. **Check Freshness:** The system records verification timestamps and evaluates available evidence about listing availability.
-8. **Rank and Filter:** Results are filtered and ordered according to the user's query and supported ranking criteria.
-9. **Display Results:** The dashboard presents consolidated opportunities and links users to their original listings.
-
-```mermaid
-flowchart TD
-    A[User Search and Preferences] --> B[NextRole Frontend]
-    B --> C[FastAPI Backend]
-    C --> D[Search Orchestrator]
-    D --> E[TinyFish Web API]
-    D --> F[Other Authorized Sources]
-    E --> G[Job Data Extraction]
-    F --> G
-    G --> H[Data Normalization]
-    H --> I[Duplicate Detection]
-    I --> J[Freshness Evaluation]
-    J --> K[Filtering and Ranking]
-    K --> L[(PostgreSQL)]
-    L --> M[Unified Job Dashboard]
-    M --> N[Original Application Link]
-```
-
-The exact workflow may vary depending on the selected source, its access restrictions, and the capabilities of the implemented integrations.
-
-## 🧑‍💻 Example Use Case
-
-Suppose a student is searching for a Python development internship.
-
-**Search preferences**
-
-| Parameter | Example |
-|---|---|
-| Job title | Python Developer Intern |
-| Experience | Fresher |
-| Location | Delhi NCR |
-| Work mode | Remote or Hybrid |
-| Employment type | Internship |
-
-NextRole consolidates matching results into one interface.
-
-| Job title | Company | Source | Verification |
-|---|---|---|---|
-| Python Developer Intern | Company A | Supported job platform | Recently verified |
-| Backend Developer Intern | Company B | Company careers page | Recently verified |
-| Junior Python Developer | Company C | Supported job feed | Needs verification |
-
-*These are fictional examples for illustrating the interface, not actual job listings.*
-
-A freshness label indicates the result of a verification process, not a guarantee that an employer will accept applications. Verification status should be based on recorded evidence and timestamps.
-
-## 🛠️ Technology Stack
-
-The following is the proposed technology stack. Individual components may change as development progresses.
-
-| Component | Technology | Purpose |
-|---|---|---|
-| Frontend | React, JavaScript or TypeScript | Search interface and dashboard |
-| Styling | CSS or Tailwind CSS | Responsive user interface |
-| Backend | Python, FastAPI | APIs and application logic |
-| Data Extraction | TinyFish Web API | Discovering and extracting supported web listings |
-| Integrations | Official APIs and authorized feeds | Additional job sources |
-| Data Processing | Python | Normalization, filtering, and deduplication |
-| Database | PostgreSQL | Persisting job listings and search-related data |
-| AI Matching | Embeddings or language models | Semantic matching and recommendations |
-| Version Control | Git and GitHub | Collaboration and source management |
-| Deployment | Docker and a suitable hosting platform | Reproducible deployment |
-
-**Important:** TinyFish integration details, available sources, API limits, and extraction capabilities must be verified against the applicable API documentation before implementation.
-
-## 🏗️ System Architecture
-
-NextRole separates the application into logical components:
-
-- **Frontend Layer:** Collects search preferences and displays results.
-- **API Layer:** Validates requests, manages search operations, and returns structured responses.
-- **Source Integration Layer:** Communicates with TinyFish and other configured sources.
-- **Processing Layer:** Normalizes records, identifies duplicates, and evaluates listing freshness.
-- **Persistence Layer:** Stores normalized listings, source metadata, and verification history.
-- **Matching Layer:** Applies search relevance and, in later versions, AI-based matching.
-
-This separation allows individual components to be developed and tested independently.
-
-## 📦 Project Scope
-
-### Minimum Viable Product (MVP)
-
-The first release aims to:
-
-- [ ] Accept job search queries and user preferences.
-- [ ] Integrate at least two usable job sources.
-- [ ] Retrieve listings through permitted integrations.
-- [ ] Normalize listing data into a common schema.
-- [ ] Detect and consolidate duplicate listings.
-- [ ] Display results in a unified dashboard.
-- [ ] Provide original listing and application links.
-- [ ] Record verification timestamps and show clear freshness statuses.
-- [ ] Handle API errors, missing fields, and unavailable sources.
-- [ ] Test the complete search-to-results workflow.
-
-### Initial Success Criteria
-
-The MVP should demonstrate that it can:
-
-1. Retrieve and display usable listings from at least two supported sources.
-2. Apply the main search filters consistently.
-3. Reduce duplicate results without incorrectly merging unrelated jobs.
-4. Distinguish recently verified listings from those whose status is unknown.
-5. Preserve links to the original opportunities.
-6. Handle unsuccessful source requests without breaking the entire search experience.
-
-Quantitative targets for latency, extraction success rate, deduplication accuracy, and verification coverage should be defined after baseline testing.
-
-## 👥 Team Responsibilities
-
-For a four-member team, responsibilities can be divided as follows.
-
-| Member | Responsibility | Main Deliverables |
-|---|---|---|
-| Member 1 | Frontend and user experience | Search page, filters, results dashboard, responsive design |
-| Member 2 | Backend and database | FastAPI endpoints, database schema, search and filter logic |
-| Member 3 | Source integrations | TinyFish integration, source adapters, extraction and normalization pipeline |
-| Member 4 | Data quality and reliability | Duplicate detection, freshness evaluation, testing, error handling, deployment support |
-
-All members should coordinate through a shared data schema, API contracts, Git branches, and integration tests.
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-Before setting up the project, install:
-
-- Python 3.12 or a compatible version supported by the chosen dependencies.
-- Node.js and npm.
-- PostgreSQL, if using a local database.
-- Git.
-- A TinyFish API key and account access, if required by the selected integration.
-
-### 1. Clone the Repository
-
-```bash
-git clone <YOUR_REPOSITORY_URL>
-cd NextRole
-```
-
-Replace `<YOUR_REPOSITORY_URL>` with the actual GitHub repository URL.
-
-### 2. Configure the Backend
-
-Create and activate a virtual environment:
-
-**Windows PowerShell**
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-```
-
-**macOS/Linux**
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-Install dependencies after creating `requirements.txt`:
-
-```bash
-pip install -r requirements.txt
-```
-
-### 3. Configure Environment Variables
-
-Create a `.env` file in the backend directory or the location expected by your application.
-
-```env
-DATABASE_URL=postgresql://USER:PASSWORD@localhost:5432/nextrole
-TINYFISH_API_KEY=your_tinyfish_api_key
-```
-
-Replace the placeholder values with your local database credentials and API key. Use the variable names and configuration format expected by the implemented application.
-
-**Never commit `.env` files, API keys, database passwords, or other secrets to GitHub.** Add `.env` to `.gitignore` and provide a sanitized `.env.example` for other contributors.
-
-### 4. Start the Backend
-
-Once the FastAPI application and its entry point have been implemented, start the development server.
-
-For an application exposed as `app.main:app`:
-
-```bash
-uvicorn app.main:app --reload
-```
-
-The API will generally be available at:
-
-- API base: `http://127.0.0.1:8000`
-- Interactive API documentation: `http://127.0.0.1:8000/docs`
-
-The exact command depends on the project's directory structure and application entry point.
-
-### 5. Start the Frontend
-
-If the frontend is located in a `frontend` directory:
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Open the local URL printed by Vite in the terminal.
-
-### 6. Verify the Integration
-
-Before testing the complete workflow, confirm that:
-
-- The backend starts successfully.
-- The database connection works.
-- The configured source integration can authenticate.
-- The application handles failed extraction requests.
-- Retrieved listings are normalized and displayed correctly.
-
-These instructions describe the intended setup workflow; successful execution requires the corresponding source files, dependencies, and configuration to exist in the repository.
-
-## 📁 Project Structure
-
-A possible project structure is:
-
-```text
-NextRole/
-├── backend/
-│   ├── app/
-│   │   ├── main.py
-│   │   ├── api/
-│   │   ├── core/
-│   │   ├── models/
-│   │   ├── schemas/
-│   │   ├── services/
-│   │   │   ├── job_search.py
-│   │   │   ├── normalization.py
-│   │   │   ├── deduplication.py
-│   │   │   └── freshness.py
-│   │   └── integrations/
-│   │       └── tinyfish.py
-│   ├── tests/
-│   ├── requirements.txt
-│   └── .env.example
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   └── App.tsx
-│   ├── package.json
-│   └── vite.config.ts
-├── docs/
-├── .gitignore
-├── LICENSE
-└── README.md
-```
-
-This is a proposed layout, not a claim that every file has already been created.
-
-## 🔐 Responsible Data Collection
-
-NextRole is designed to use TinyFish and other integrations only for sources that can be accessed through permitted methods.
-
-- Respect each platform's terms of service, access restrictions, and applicable laws.
-- Prefer official APIs, authorized feeds, and permitted integrations.
-- Do not bypass authentication, paywalls, anti-bot protections, or access controls.
-- Store only the data needed to support job discovery and verification.
-- Protect API credentials and other sensitive configuration.
-- Link back to original listings and identify their source.
-- Record when a listing was last checked and avoid presenting uncertain status as confirmed.
-- Respect API rate limits and handle source failures gracefully.
-
-Job availability can change at any time. NextRole should communicate uncertainty honestly and direct users to the original source for the latest application details.
-
-## 🔮 Future Enhancements
-
-Once the MVP is stable, potential enhancements include:
-
-- **Semantic Search:** Understand queries beyond exact job-title matches.
-- **AI Job Matching:** Compare skills, experience, and preferences with listing requirements.
-- **Resume Intelligence:** Extract skills from resumes and recommend relevant roles.
-- **Skill-Gap Analysis:** Identify missing skills for a target position.
-- **Application Tracker:** Organize saved jobs and application statuses.
-- **Automated Alerts:** Surface newly discovered opportunities that match saved preferences.
-- **Analytics Dashboard:** Track source coverage, duplicate rates, extraction success, and listing freshness.
-- **Improved Ranking:** Combine keyword relevance, location compatibility, experience requirements, and optional semantic similarity.
-
-These enhancements should be prioritized based on user feedback, data quality, API reliability, and the time available for development.
-
-## 🤝 Contributing
-
-Contributions, bug reports, and feature suggestions are welcome.
-
-1. Fork the repository.
-2. Create a feature branch.
-3. Make a focused change.
-4. Add or update tests where appropriate.
-5. Open a pull request with a clear description of the changes.
-
-Example:
-
-```bash
-git checkout -b feature/job-search
-git add .
-git commit -m "feat: implement unified job search"
-git push origin feature/job-search
-```
-
-Follow the project's agreed coding conventions and avoid committing secrets, generated files, or unrelated changes.
-
-## 📄 License
-
-Choose and add an appropriate open-source license before distributing the project. If the repository uses the MIT License, include the full license text in a `LICENSE` file.
+- [Architecture & Data Flow](#-architecture--data-flow)
+- [Reference Repositories & Learnings](#-reference-repositories--learnings)
+- [Prerequisites](#-prerequisites)
+- [Environment Setup & Installation](#-environment-setup--installation)
+  - [1. Backend Setup (.venv)](#1-backend-setup-venv)
+  - [2. Environment Variables (.env)](#2-environment-variables-env)
+  - [3. Frontend Setup](#3-frontend-setup)
+- [Running NextRole Locally](#-running-nextrole-locally)
+- [API Endpoints](#-api-endpoints)
+- [Testing](#-testing)
+- [Troubleshooting & Known Limitations](#-troubleshooting--known-limitations)
 
 ---
 
-**NextRole — Search once. Discover more. Find your next opportunity.**
+## 🔄 Core Workflow
+
+```text
+Enter Job Query & Filters 
+         ↓
+Construct Targeted Query for TinyFish Web API
+         ↓
+TinyFish Searches & Discovers Live Postings
+         ↓
+Normalize Fields (Title, Company, Location, Skills, Salary, Work Mode)
+         ↓
+Deduplicate Listings (Canonical URL + Company/Title Matching)
+         ↓
+Display Interactive Results in Dashboard
+         ↓
+Open Original Application Link in New Tab
+```
+
+---
+
+## ✨ Key Features
+
+1. **Unified Job & Internship Search:**
+   - Search by job title, keywords, location, work mode (Remote/Hybrid/On-site), employment type (Internship/Full-time/etc.), and experience level.
+2. **TinyFish Web API Integration:**
+   - Real server-side integration querying `https://api.search.tinyfish.ai` using authenticated `X-API-Key` headers.
+3. **Smart Field Extraction:**
+   - Parses job titles, hiring company names, technical skills chips, work modes, employment types, salary/stipend information, and source platforms without inventing missing fields.
+4. **Duplicate Elimination:**
+   - Multi-tier deduplication based on canonicalized URLs (stripping UTM tracking tags, session identifiers, trailing slashes) and normalized company + title pairs.
+5. **Freshness & Integrity Badging:**
+   - Every listing clearly displays a **Needs verification** badge explaining that active application status has not been confirmed by automated form submission.
+6. **Graceful Search States & Actionable Error Handling:**
+   - Distinct interface states for *Ready to search*, *Searching (skeleton loader)*, *Results found*, *No results found*, *Credentials missing*, and *Request timed out*.
+7. **No Heavy Database Overhead:**
+   - High-performance, in-memory processing using Python standard libraries and Pydantic models. Zero database setup required.
+
+---
+
+## 🏗️ Architecture & Data Flow
+
+- **Frontend:** React 19 + TypeScript + Vite. Styled with modern, high-contrast dark theme.
+- **Backend:** Python 3.14 + FastAPI + Uvicorn + Pydantic v2 + HTTPX.
+- **Data Store:** In-memory session processing (no database required for MVP).
+- **External Integration:** TinyFish Web API (`https://api.search.tinyfish.ai`).
+
+```text
+NextRole/
+├── .venv/                     # Python 3.14 virtual environment
+├── backend/
+│   ├── app/
+│   │   ├── main.py            # FastAPI entry point, CORS, static SPA mount
+│   │   ├── models.py          # Pydantic schemas (JobListing, SearchRequest, etc.)
+│   │   ├── routes/
+│   │   │   └── search.py      # /api/health and /api/search endpoints
+│   │   └── services/
+│   │       ├── tinyfish.py     # TinyFish HTTP client & error hierarchy
+│   │       ├── job_parser.py   # Text normalizer & attribute extractor
+│   │       └── deduplication.py# URL canonicalizer & duplicate detector
+│   ├── tests/
+│   │   └── test_backend.py    # 10 unit tests covering all search flows
+│   └── requirements.txt       # Backend dependencies
+├── frontend/
+│   ├── src/
+│   │   ├── components/        # Header, SearchBar, JobCard, StatusViews
+│   │   ├── services/api.ts    # Frontend HTTP client & error handler
+│   │   ├── types.ts           # TypeScript interfaces
+│   │   ├── App.tsx            # Main application coordinator
+│   │   └── index.css          # Responsive styling
+│   ├── package.json
+│   └── vite.config.ts         # Vite configuration with /api dev proxy
+├── .env                       # Local secrets (never committed to Git)
+├── .env.example               # Safe template for environment variables
+├── .gitignore                 # Excludes .venv/, .env, node_modules/, dist/
+└── README.md
+```
+
+---
+
+## 🔬 Reference Repositories & Learnings
+
+Before building NextRole, two open-source reference implementations were inspected:
+
+1. **AutoJobHunter-AI (`dilipnalage1063/AutoJobHunter-AI`)**
+   - *Architecture:* Spring Boot backend querying `https://api.tinyfish.ai/v1/agent/run`.
+   - *Key Learning & Caution:* When TinyFish returned an error or was unreachable, the code silently caught the exception and generated hardcoded mock job cards. NextRole specifically avoids this anti-pattern: errors, missing keys, and invalid tokens are surfaced transparently to the user with actionable instructions.
+2. **JobScout-AI (`Bhavishya003Sharma/JobScout-AI`)**
+   - *Architecture:* Streamlit single-script Python application using `https://api.search.tinyfish.ai`.
+   - *Key Learning:* Provided useful heuristics for canonicalizing URLs (stripping query parameters and trailing slashes) and filtering out generic directory search index pages. NextRole adapted these patterns into decoupled, tested Python modules and a modern React/FastAPI architecture.
+
+---
+
+## 📋 Prerequisites
+
+- **Python:** 3.10+ (tested on Python 3.14)
+- **Node.js:** v18+ (tested on Node v24.12.0)
+- **TinyFish API Key:** Generated from [agent.tinyfish.ai/api-keys](https://agent.tinyfish.ai/api-keys)
+
+---
+
+## 🚀 Environment Setup & Installation
+
+### 1. Backend Setup (.venv)
+
+Navigate to the project root and create the virtual environment:
+
+```powershell
+# Navigate to the NextRole project root
+cd c:\Users\Dheeraj rai\Desktop\NextRole
+
+# Create the virtual environment
+python -m venv .venv
+
+# Activate the virtual environment (PowerShell)
+.\.venv\Scripts\Activate.ps1
+# Or in Command Prompt: .\.venv\Scripts\activate.bat
+
+# Verify Python executable is inside .venv
+python -c "import sys; print(sys.executable)"
+
+# Upgrade pip and install backend dependencies
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -r backend/requirements.txt
+```
+
+### 2. Environment Variables (.env)
+
+NextRole securely reads configuration from a `.env` file in the project root. Create `.env` from `.env.example`:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Edit `.env` to configure your settings:
+
+```env
+# TinyFish API credentials (get your key from https://agent.tinyfish.ai/api-keys)
+TINYFISH_API_KEY=your_actual_tinyfish_api_key_here
+
+# Application configuration
+APP_ENV=development
+LOG_LEVEL=INFO
+
+# Backend server configuration
+BACKEND_HOST=127.0.0.1
+BACKEND_PORT=8000
+
+# Frontend URL (for CORS)
+FRONTEND_URL=http://localhost:5173
+```
+
+> **Security Note:** The `.env` file is excluded in `.gitignore` and must never be committed to Git. The TinyFish API key is kept strictly on the backend and is never sent to the browser.
+
+### 3. Frontend Setup
+
+Install the frontend packages:
+
+```powershell
+cd frontend
+npm.cmd install
+npm.cmd run build
+cd ..
+```
+
+---
+
+## 🏃 Running NextRole Locally
+
+### Option A: Development Mode (Hot Reloading)
+
+Run the backend and frontend development servers concurrently:
+
+**Terminal 1 — Backend (FastAPI):**
+```powershell
+# Inside NextRole root
+$env:PYTHONPATH = "backend"
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+```
+*Backend runs at `http://127.0.0.1:8000` with Swagger docs at `http://127.0.0.1:8000/docs`.*
+
+**Terminal 2 — Frontend (Vite):**
+```powershell
+cd frontend
+npm.cmd run dev
+```
+*Frontend runs at `http://localhost:5173` and automatically proxies `/api` requests to the backend.*
+
+---
+
+### Option B: Unified Production Mode (Single Command)
+
+Once built (`npm run build` in `frontend`), FastAPI serves both the REST API and the React frontend on a single port:
+
+```powershell
+$env:PYTHONPATH = "backend"
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+Open `http://127.0.0.1:8000` in your browser.
+
+---
+
+## 🔌 API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/health` | Checks backend status, API version, and whether TinyFish is configured. |
+| `POST` | `/api/search` | Performs a live TinyFish search, parses results, deduplicates, and returns listings. |
+
+### Example Search Request (`POST /api/search`):
+```json
+{
+  "query": "Python Developer Intern",
+  "location": "Delhi NCR",
+  "work_mode": "Remote",
+  "employment_type": "Internship",
+  "experience_level": "Fresher",
+  "limit": 20
+}
+```
+
+### Example Search Response:
+```json
+{
+  "query": "Python Developer Intern",
+  "total_found": 15,
+  "deduplicated_count": 3,
+  "results": [
+    {
+      "id": "a1b2c3d4e5f67890",
+      "title": "Python Developer Intern",
+      "company": "TechSolutions",
+      "location": "Delhi NCR",
+      "description": "Looking for a Python Developer Intern with basic knowledge of FastAPI or Django.",
+      "skills": ["Python", "FastAPI", "Git"],
+      "employment_type": "Internship",
+      "experience_level": "Fresher / Entry level",
+      "work_mode": "Remote",
+      "salary": "₹20,000/month",
+      "source": "Internshala",
+      "url": "https://internshala.com/internship/detail/python-intern",
+      "posting_date": "2026-10-18",
+      "extracted_at": "2026-10-20T12:30:00Z",
+      "status": "Needs verification"
+    }
+  ],
+  "applied_filters": {
+    "location": "Delhi NCR",
+    "work_mode": "Remote",
+    "employment_type": "Internship",
+    "experience_level": "Fresher"
+  },
+  "search_metadata": {
+    "source": "TinyFish Web API",
+    "provider_total": 15,
+    "retrieved_at": "2026-10-20T12:30:00Z"
+  }
+}
+```
+
+---
+
+## 🧪 Testing
+
+The test suite covers request validation, parsing, error handling, duplicate detection, and health checks.
+
+Run tests using pytest inside `.venv`:
+
+```powershell
+$env:PYTHONPATH = "backend"
+.\.venv\Scripts\python.exe -m pytest backend/tests/ -v
+```
+
+### Test Coverage Highlights:
+- `test_health_check_endpoint`: Verifies backend health and status reporting.
+- `test_search_request_validation`: Ensures empty/invalid requests are rejected (422).
+- `test_clean_text_and_url_canonicalization`: Tests tracking parameter removal and URL normalization.
+- `test_job_parser_fields`: Validates extraction of title, company, skills, work mode, and salary.
+- `test_job_parser_malformed_and_missing_fields`: Ensures unknown fields remain empty and are never hallucinated.
+- `test_deduplication_exact_url_and_company_title`: Verifies that duplicate URLs and identical company+title listings are removed while preserving distinct companies.
+- `test_api_auth_failure_handling`: Verifies 401 propagation when TinyFish credentials are invalid.
+- `test_api_timeout_handling`: Verifies 504 gateway timeout handling.
+- `test_empty_search_results`: Confirms clean response structure when zero results are found.
+- `test_api_missing_key_handling`: Tests behavior when `TINYFISH_API_KEY` is not configured.
+
+---
+
+## ⚠️ Troubleshooting & Known Limitations
+
+1. **TinyFish Authentication Error (HTTP 401):**
+   - Symptom: Dashboard shows *"TinyFish API Credentials Required"*.
+   - Cause: `TINYFISH_API_KEY` is missing or invalid.
+   - Fix: Check your key at [agent.tinyfish.ai/api-keys](https://agent.tinyfish.ai/api-keys) and update `.env`.
+2. **Missing Job Details:**
+   - Some search snippets do not specify a salary or exact city. NextRole strictly preserves data integrity by leaving these fields unknown rather than inventing placeholders.
+3. **In-Memory Storage:**
+   - Search results exist in-memory for the active session. If the server restarts, historical search results are cleared. Persistent database storage (PostgreSQL/SQLite) can be introduced in a future release.
+4. **PowerShell Script Execution Policy:**
+   - If running `npm` or `.venv\Scripts\Activate.ps1` gives an execution policy error, run scripts with `npm.cmd` or run PowerShell with `-ExecutionPolicy Bypass`.
