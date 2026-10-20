@@ -57,9 +57,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isLoading }) => 
         <div className="search-inputs-grid">
           {/* Query input */}
           <div className="input-group">
-            <Search className="input-icon" size={18} />
+            <Search className="input-icon" size={18} aria-hidden="true" />
             <input
               type="text"
+              id="search-query"
+              name="query"
+              aria-label="Job title, keywords, or role"
               className="search-input"
               placeholder="Job title, keywords, or role (e.g. Python Developer Intern)..."
               value={query}
@@ -71,9 +74,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isLoading }) => 
 
           {/* Location input */}
           <div className="input-group location-group">
-            <MapPin className="input-icon" size={18} />
+            <MapPin className="input-icon" size={18} aria-hidden="true" />
             <input
               type="text"
+              id="search-location"
+              name="location"
+              aria-label="Location"
               className="search-input"
               placeholder="Location (e.g. Delhi NCR, Remote, Bengaluru)..."
               value={location}
@@ -88,9 +94,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isLoading }) => 
               type="button"
               className={`filter-toggle-btn ${showFilters ? 'active' : ''}`}
               onClick={() => setShowFilters(!showFilters)}
+              aria-expanded={showFilters}
+              aria-controls="filters-tray"
               title="Toggle smart filters"
             >
-              <SlidersHorizontal size={17} />
+              <SlidersHorizontal size={17} aria-hidden="true" />
               <span>Filters</span>
             </button>
 
@@ -98,16 +106,17 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isLoading }) => 
               type="submit"
               className="search-submit-btn"
               disabled={isLoading || !query.trim()}
+              aria-label={isLoading ? "Searching for opportunities..." : "Find Opportunities"}
             >
               {isLoading ? (
                 <>
-                  <Loader2 size={18} className="spinner" />
+                  <Loader2 size={18} className="spinner" aria-hidden="true" />
                   <span>Searching...</span>
                 </>
               ) : (
                 <>
                   <span>Find Opportunities</span>
-                  <ArrowRight size={18} />
+                  <ArrowRight size={18} aria-hidden="true" />
                 </>
               )}
             </button>
@@ -116,10 +125,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isLoading }) => 
 
         {/* Filters bar */}
         {showFilters && (
-          <div className="filters-tray animate-fade-in">
+          <div id="filters-tray" className="filters-tray animate-fade-in" role="region" aria-label="Search filters">
             <div className="filter-item">
-              <label><Briefcase size={14} /> Work Mode</label>
+              <label htmlFor="filter-work-mode"><Briefcase size={14} aria-hidden="true" /> Work Mode</label>
               <select
+                id="filter-work-mode"
+                name="work_mode"
                 value={workMode}
                 onChange={(e) => setWorkMode(e.target.value)}
                 disabled={isLoading}
@@ -132,8 +143,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isLoading }) => 
             </div>
 
             <div className="filter-item">
-              <label><Clock size={14} /> Employment Type</label>
+              <label htmlFor="filter-employment-type"><Clock size={14} aria-hidden="true" /> Employment Type</label>
               <select
+                id="filter-employment-type"
+                name="employment_type"
                 value={employmentType}
                 onChange={(e) => setEmploymentType(e.target.value)}
                 disabled={isLoading}
@@ -147,8 +160,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isLoading }) => 
             </div>
 
             <div className="filter-item">
-              <label><Building2 size={14} /> Experience</label>
+              <label htmlFor="filter-experience-level"><Building2 size={14} aria-hidden="true" /> Experience</label>
               <select
+                id="filter-experience-level"
+                name="experience_level"
                 value={experienceLevel}
                 onChange={(e) => setExperienceLevel(e.target.value)}
                 disabled={isLoading}

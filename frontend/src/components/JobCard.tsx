@@ -96,9 +96,10 @@ export const JobCard: React.FC<JobCardProps> = ({ job }) => {
           target="_blank"
           rel="noopener noreferrer"
           className="apply-button"
+          aria-label={`Apply for ${job.title} at ${job.company || 'hiring company'} (opens in a new tab)`}
         >
           <span>Apply / View Job</span>
-          <ExternalLink size={14} />
+          <ExternalLink size={14} aria-hidden="true" />
         </a>
       </div>
     </div>
