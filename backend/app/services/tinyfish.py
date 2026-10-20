@@ -1,9 +1,19 @@
 import os
 import logging
+from pathlib import Path
 from typing import Dict, Any, Optional
+from dotenv import load_dotenv
 import httpx
 
 logger = logging.getLogger(__name__)
+
+
+def get_tinyfish_api_key() -> str:
+    """Dynamically read the latest TINYFISH_API_KEY from project-root .env."""
+    root_env = Path(__file__).resolve().parent.parent.parent.parent / ".env"
+    if root_env.exists():
+        load_dotenv(dotenv_path=root_env, override=True)
+    return os.getenv("TINYFISH_API_KEY", "").strip()
 
 
 class TinyFishError(Exception):
@@ -46,7 +56,7 @@ class TinyFishClient:
     BASE_SEARCH_URL = "https://api.search.tinyfish.ai"
 
     def __init__(self, api_key: Optional[str] = None, timeout: float = 30.0):
-        self.api_key = (api_key or os.getenv("TINYFISH_API_KEY", "")).strip()
+        self.api_key = (api_key or get_tinyfish_api_key()).strip()
         self.timeout = timeout
 
     @property

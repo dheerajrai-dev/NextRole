@@ -9,6 +9,7 @@ from app.services.tinyfish import (
     TinyFishTimeoutError,
     TinyFishRateLimitError,
     TinyFishAPIError,
+    get_tinyfish_api_key,
 )
 from app.services.job_parser import parse_job_item
 from app.services.deduplication import deduplicate_jobs
@@ -21,7 +22,7 @@ router = APIRouter(prefix="/api", tags=["search"])
 @router.get("/health", response_model=HealthResponse)
 async def health_check():
     """Health check endpoint to verify backend status and configuration."""
-    api_key = os.getenv("TINYFISH_API_KEY", "").strip()
+    api_key = get_tinyfish_api_key()
     return HealthResponse(
         status="healthy",
         version="0.1.0",
