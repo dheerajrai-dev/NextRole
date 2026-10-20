@@ -3,6 +3,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from app.routes.search import router as search_router
 
 # Load environment variables from project root .env regardless of working directory
@@ -39,13 +41,28 @@ app.add_middleware(
 
 app.include_router(search_router)
 
+# Mount frontend/dist if built, providing single-command full-stack runtime
+dist_dir = root_dir / "frontend" / "dist"
+if dist_dir.exists() and (dist_dir / "index.html").exists():
+    app.mount("/assets", StaticFiles(directory=dist_dir / "assets"), name="assets")
 
-@app.get("/")
-async def root():
-    return {
-        "name": "NextRole API",
-        "version": "0.1.0",
-        "status": "running",
-        "docs": "/docs",
-        "health": "/api/health",
-    }
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        # Don't intercept API routes or docs
+        if full_path.startswith("api/") or full_path in ("docs", "openapi.json", "redoc"):
+            return None
+        file_target = dist_dir / full_path
+        if file_target.exists() and file_target.is_file():
+            return FileResponse(file_target)
+        return FileResponse(dist_dir / "index.html")
+else:
+    @app.get("/")
+    async def root():
+        return {
+            "name": "NextRole API",
+            "version": "0.1.0",
+            "status": "running",
+            "docs": "/docs",
+            "health": "/api/health",
+            "frontend": "Run 'npm run dev' inside frontend/ to start the UI dev server.",
+        }
